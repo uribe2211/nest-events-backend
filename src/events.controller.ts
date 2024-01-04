@@ -1,4 +1,4 @@
-import { Controller, Delete, Get, Post, Patch, Param, Body, HttpCode, Injectable } from '@nestjs/common';
+import { Controller, Delete, Get, Post, Patch, Param, Body, HttpCode, ParseIntPipe, ValidationPipe, UsePipes } from '@nestjs/common';
 import { CreateEventDto } from './create-event.dto';
 import { UpdateEventDto } from './update-event.dto';
 import { Event } from './event.entity';
@@ -22,13 +22,14 @@ export class EventsController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id){
+  async findOne(@Param('id', ParseIntPipe) id){
 
     const event = await this.repository.findOne(id);
     return event;
 
   }
 
+  @UsePipes()
   @Post()
   @HttpCode(201)
   async create(@Body() input:CreateEventDto) {
